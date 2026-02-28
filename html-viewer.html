@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HTML阅读 | Arcades-Project</title>
+  <link rel="stylesheet" href="./assets/css/theme.css">
+</head>
+<body>
+  <nav>
+    <div class="nav-top">
+      <div class="theme-toggle">
+        <a id="toggleTheme" class="toggle-btn" href="#">切换主题</a>
+        <a class="toggle-btn secondary" href="./index.html">返回首页</a>
+      </div>
+    </div>
+  </nav>
+  <main class="layout">
+    <aside class="toc">
+      <h3>目录</h3>
+      <ul id="toc"></ul>
+    </aside>
+    <section class="card">
+      <a class="return" id="downloadHtml" href="#">下载 HTML</a>
+      <article id="content" class="doc"></article>
+    </section>
+  </main>
+  <footer>
+    <p>© Arcades-Project</p>
+  </footer>
+  <script>
+    const root = document.documentElement;
+    function applyTheme(t){ root.setAttribute('data-theme', t); localStorage.setItem('theme', t); }
+    function initTheme(){ const t = localStorage.getItem('theme'); if (t) applyTheme(t); else { const prefers = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'; applyTheme(prefers); } }
+    initTheme();
+    document.getElementById('toggleTheme').addEventListener('click', function(e){ e.preventDefault(); const t = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'; applyTheme(t); });
+    const params = new URLSearchParams(location.search);
+    const fileParam = params.get('file');
+    const tocEl = document.getElementById('toc');
+    const contentEl = document.getElementById('content');
+    const downloadEl = document.getElementById('downloadHtml');
+    async function loadHtml(path){
+      const res = await fetch(path);
+      if (!res.ok) throw new Error('无法获取 HTML：' + res.status);
+      const html = await res.text();
+      const doc = new DOMParser().parseFromString(html, 'text/html');
+      const body = doc.body || doc;
+      contentEl.innerHTML = body.innerHTML;
+      buildToc();
+    }
+    function buildToc(){
+      const headings = contentEl.querySelectorAll('h1, h2, h3');
+      const list = document.createDocumentFragment();
+      headings.forEach((h, i)=>{
+        const id = 'h-' + i;
+        h.id = id;
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.href = '#' + id;
+        a.textContent = h.textContent.trim();
+        li.style.marginLeft = h.tagName === 'H1' ? '0' : h.tagName === 'H2' ? '12px' : '24px';
+        li.appendChild(a);
+        list.appendChild(li);
+      });
+      tocEl.textContent = '';
+      tocEl.appendChild(list);
+    }
+    function init(){
+      if (!fileParam) {
+        contentEl.textContent = '未提供文件参数。';
+        return;
+      }
+      const path = decodeURIComponent(fileParam);
+      downloadEl.href = path;
+      const name = path.split('/').pop();
+      downloadEl.download = name;
+      loadHtml(path).catch(err=>{ contentEl.textContent = '加载失败：' + err.message; });
+    }
+    init();
+  </script>
+</body>
+</html>

@@ -4,84 +4,74 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Arcades-Project 翻译成果展示</title>
-  <style>
-    :root { color-scheme: light dark; }
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", "Helvetica Neue", Arial, "Hiragino Sans GB", "Source Han Sans SC", sans-serif; margin: 0; padding: 0; line-height: 1.6; }
-    header { background: #1f2937; color: #fff; padding: 24px; }
-    header h1 { margin: 0; font-size: 26px; }
-    header p { margin: 8px 0 0; color: #e5e7eb; }
-    main { max-width: 960px; margin: 24px auto; padding: 0 16px; }
-    section { margin-bottom: 28px; }
-    h2 { font-size: 20px; margin: 16px 0; border-bottom: 1px solid #e5e7eb; padding-bottom: 8px; }
-    ul { list-style: none; padding: 0; }
-    li { margin: 12px 0; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
-    a { color: #2563eb; text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    .card { border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; }
-    footer { color: #6b7280; text-align: center; padding: 24px; border-top: 1px solid #e5e7eb; }
-    .actions { display: flex; gap: 8px; flex-wrap: wrap; }
-    .btn { display: inline-block; padding: 6px 10px; border: 1px solid #e5e7eb; border-radius: 6px; background: #fff; color: #111827; text-decoration: none; }
-    .btn:hover { background: #f3f4f6; }
-  </style>
+  <link rel="stylesheet" href="./assets/css/theme.css">
 </head>
 <body>
   <header>
-    <h1>Arcades-Project 翻译成果展示</h1>
-    <p>分享当前与后续的翻译稿，支持在线阅读与下载。</p>
+    <div class="hero">
+      <img src="./assets/banner.svg" alt="Arcades-Project">
+    </div>
+    <div class="hero-text">
+      <h1>Arcades-Project 翻译成果展示</h1>
+      <p>蓝色主题与图标美化，支持在线阅读、下载与自动生成 HTML/Markdown。</p>
+    </div>
   </header>
+  <nav>
+    <div class="nav-top">
+      <div class="theme-toggle">
+        <a id="toggleTheme" class="toggle-btn" href="#">切换主题</a>
+        <a class="toggle-btn secondary" href="./generated/html/">HTML目录</a>
+        <a class="toggle-btn secondary" href="./generated/md/">Markdown目录</a>
+      </div>
+    </div>
+    <div class="nav-wrap">
+      {% for cat in site.data.articles.categories %}
+      <a class="nav-item" href="#cat-{{ cat.key }}">
+        <svg class="icon" viewBox="0 0 24 24"><path fill="currentColor" d="M3 4h18v2H3zm0 6h18v2H3zm0 6h18v2H3"/></svg>
+        <span>{{ cat.title }}</span>
+      </a>
+      {% endfor %}
+    </div>
+  </nav>
   <main>
-    <section class="card">
-      <h2>项目概览</h2>
-      <p>本页面通过 GitHub Pages 发布，您可在此查看、在线阅读并下载翻译成果。后续新增稿件将持续更新。</p>
-    </section>
-    <section class="card">
-      <h2>当前翻译成果</h2>
+    {% for cat in site.data.articles.categories %}
+    <section class="card" id="cat-{{ cat.key }}">
+      <h2>{{ cat.title }}</h2>
+      {% assign items = site.data.articles.items[cat.key] %}
+      {% if items and items.size > 0 %}
       <ul>
+        {% for item in items %}
+        {% assign cover = item.cover | default: 'assets/placeholder.svg' %}
+        {% assign base = item.docx | replace: '.docx', '' %}
+        {% assign docx_path = item.docx | prepend: './' %}
+        {% assign viewer_param = docx_path | uri_escape %}
         <li>
-          <span>【I 复制技术、石印术】翻译稿.docx</span>
+          <img class="thumb" src="{{ cover }}" alt="{{ item.title }}">
+          <span>{{ item.title }}</span>
           <span class="actions">
-            <a class="btn" href="./viewer.html?file=.%2F【I 复制技术、石印术】翻译稿.docx">在线阅读</a>
-            <a class="btn" href="./【I 复制技术、石印术】翻译稿.docx" download>下载</a>
+            <a class="btn" href="./viewer.html?file={{ viewer_param }}">在线阅读</a>
+            <a class="btn secondary" href="{{ docx_path }}" download>下载</a>
+            <a class="btn secondary" href="./html-viewer.html?file={{ 'generated/html/' | append: base | append: '.html' | uri_escape }}">HTML阅读</a>
+            <a class="btn secondary" href="{{ 'generated/md/' | append: base | append: '.md' }}">Markdown</a>
           </span>
         </li>
-        <li>
-          <span>【J 波德莱尔】翻译稿.docx</span>
-          <span class="actions">
-            <a class="btn" href="./viewer.html?file=.%2F【J波德莱尔】翻译稿.docx">在线阅读</a>
-            <a class="btn" href="./【J波德莱尔】翻译稿.docx" download>下载</a>
-          </span>
-        </li>
-        <li>
-          <span>【T 照明的形式】翻译稿.docx</span>
-          <span class="actions">
-            <a class="btn" href="./viewer.html?file=.%2F【T照明的形式】翻译稿.docx">在线阅读</a>
-            <a class="btn" href="./【T照明的形式】翻译稿.docx" download>下载</a>
-          </span>
-        </li>
-        <li>
-          <span>【X 马克思】翻译稿.docx</span>
-          <span class="actions">
-            <a class="btn" href="./viewer.html?file=.%2F【X马克思】翻译稿.docx">在线阅读</a>
-            <a class="btn" href="./【X马克思】翻译稿.docx" download>下载</a>
-          </span>
-        </li>
-        <li>
-          <span>【Y 照相术】翻译稿.docx</span>
-          <span class="actions">
-            <a class="btn" href="./viewer.html?file=.%2F【Y照相术】翻译稿.docx">在线阅读</a>
-            <a class="btn" href="./【Y照相术】翻译稿.docx" download>下载</a>
-          </span>
-        </li>
+        {% endfor %}
       </ul>
-      <p>在线阅读由浏览器本地转换生成；如需更高保真，可下载后在本地使用 Office 打开。</p>
+      {% else %}
+      <p class="muted">整理中。</p>
+      {% endif %}
     </section>
-    <section class="card">
-      <h2>后续更新</h2>
-      <p>新增翻译稿只需将文件推送到仓库根目录，并在此列表中添加链接即可自动上线。</p>
-    </section>
+    {% endfor %}
   </main>
   <footer>
     <p>© Arcades-Project</p>
   </footer>
+  <script>
+    const root = document.documentElement;
+    function applyTheme(t) { root.setAttribute('data-theme', t); localStorage.setItem('theme', t); }
+    function initTheme() { const t = localStorage.getItem('theme'); if (t) applyTheme(t); else { const prefers = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'; applyTheme(prefers); } }
+    initTheme();
+    document.getElementById('toggleTheme').addEventListener('click', function(e){ e.preventDefault(); const t = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'; applyTheme(t); });
+  </script>
 </body>
 </html>

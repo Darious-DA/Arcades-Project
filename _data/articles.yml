@@ -1,0 +1,35 @@
+categories:
+  - key: original
+    title: 原著重要卷宗翻译
+  - key: dialectics
+    title: 《看的辩证法》中译本
+  - key: reports
+    title: 研究报告
+  - key: translations
+    title: 相关论文译本
+  - key: team
+    title: 团队论文产出
+  - key: discuss
+    title: 交流讨论
+items:
+  original:
+    - title: 【I 复制技术、石印术】翻译稿
+      docx: "【I 复制技术、石印术】翻译稿.docx"
+      cover: "assets/placeholder.svg"
+    - title: 【J 波德莱尔】翻译稿
+      docx: "【J波德莱尔】翻译稿.docx"
+      cover: "assets/placeholder.svg"
+    - title: 【T 照明的形式】翻译稿
+      docx: "【T照明的形式】翻译稿.docx"
+      cover: "assets/placeholder.svg"
+    - title: 【X 马克思】翻译稿
+      docx: "【X马克思】翻译稿.docx"
+      cover: "assets/placeholder.svg"
+    - title: 【Y 照相术】翻译稿
+      docx: "【Y照相术】翻译稿.docx"
+      cover: "assets/placeholder.svg"
+  dialectics: []
+  reports: []
+  translations: []
+  team: []
+  discuss: []
